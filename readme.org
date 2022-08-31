@@ -1,0 +1,29 @@
+#+title: Dockerized snort3
+
+This is a dockerized setup of =snort3=. It is geared toward checking a
+directory of .pcap-files but can be used for "online-mode" as well.
+
+* Usage
+To check .pcap-files in =./pcaps= using the Snort-rules in
+=./etc/rules/snort.rules=, just run:
+#+begin_src shell
+docker-compose up
+#+end_src
+This will append the arguments in the =command=-field of the
+=docker-compose.yml= to the =entrypoint= specified in there.
+
+Alternatively, you could use, the =docker-compose run=-command naming
+the service to pass custom options to the entrypoint to achieve the same:
+#+begin_src shell
+docker-compose run snort3 -r /tmp/test.pcap
+#+end_src
+
+To run =snort3= in continuos online mode, run the following command.
+#+begin_src shell
+NIC="eth0" # or another NIC available on the host machine
+docker-compose run snort3 -i ${NIC}
+#+end_src
+
+* Acknowledgements
+The Dockerfile is inspired by
+https://github.com/John-Lin/docker-snort.
