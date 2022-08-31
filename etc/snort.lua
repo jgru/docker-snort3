@@ -182,13 +182,14 @@ classifications = default_classifications
 ips =
 {
     -- use this to enable decoder and inspector alerts
-    --enable_builtin_rules = true,
+    -- enable_builtin_rules = true,
 
     -- use include for rules files; be sure to set your path
     -- note that rules files can include other rules files
     -- (see also related path vars at the top of snort_defaults.lua)
     variables = default_variables,
-    include = "./rules/snort.rules"
+    include = RULE_PATH .. "/snort.rules",
+    -- Eventually, include even more rules
 }
 
 -- use these to configure additional rule actions

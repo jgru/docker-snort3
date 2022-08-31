@@ -51,6 +51,7 @@ RUN wget https://github.com/snort3/snort3/archive/refs/tags/${SNORT_VERSION}.tar
 RUN ldconfig
 
 RUN mkdir -p /var/log/snort
+
 COPY etc/ ${INSTALLPATH}/etc/snort/
 
 # Clean up APT when done.
