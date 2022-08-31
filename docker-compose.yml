@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  snort3:
+    image: snort3
+    build:
+      context: .
+    network_mode: "host"
+    volumes:
+      # Map logs for offline mode
+      - ./log/:/var/log/snort
+      # Map config and rules
+      - ./etc/:/etc/snort/
+      # Map pcaps
+      - ./pcaps:/tmp
+    # Specify the command:
+    entrypoint:
+      # # Continuous capturing on ${CAPTURE_NIC} as defined in .env-file
+      # ["snort", "-i", "${CAPTURE_NIC}", "-c", "/etc/snort/snort.lua", "-l", "/var/log/snort", "-R", "/etc/snort/rules/local.rules"]
+      #
+      #
+      # Offline analysis using directories of .pcaps bind-mounted from ./pcaps
+      ["snort",  "-c", "/etc/snort/snort.lua", "-l", "/var/log/snort", "-R", "/etc/snort/rules/local.rules", "--pcap-dir", "/tmp/"]

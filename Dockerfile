@@ -3,6 +3,9 @@ FROM debian:bookworm-slim
 
 MAINTAINER jgru
 
+ARG NIC=wlp0s20f3
+
+
 RUN apt-get update && \
     apt-get install -y \
         git \
@@ -56,10 +59,7 @@ RUN mkdir -p /var/log/snort
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     /opt/snort3-${SNORT_VERSION}.tar.gz /opt/libdaq-${DAQ_VERSION}.tar.gz
 
-WORKDIR /tmp
+WORKDIR /var/log/snort
 
-ENV NIC eth0
-
-# Validate an installation
-# snort -i eth0 -c /etc/snort/etc/snort.lua -T
-CMD ["snort", "-i", "${NIC}", "-c", "/etc/snort/snort.lua", "-T"]
+# Test the validity of the installation
+CMD ["snort", "-c", "/etc/snort/snort.lua", "-T"]
