@@ -8,15 +8,15 @@ services:
     volumes:
       # Map logs for offline mode
       - ./log/:/var/log/snort
-      # Map config and rules
+      # Map configuration files and rules
       - ./etc/:/etc/snort/
       # Map pcaps
       - ./pcaps:/tmp
     # Specify the command:
     entrypoint:
-      # # Continuous capturing on ${CAPTURE_NIC} as defined in .env-file
-      # ["snort", "-i", "${CAPTURE_NIC}", "-c", "/etc/snort/snort.lua", "-l", "/var/log/snort", "-R", "/etc/snort/rules/local.rules"]
+      # # Continuous capturing on ${CAPTURE_NIC} as defined in .env-file, rules are loaded from /etc/snort/rules by default
+      # ["snort", "-i", "${CAPTURE_NIC}", "-c", "/etc/snort/snort.lua", "-l", "/var/log/snort", "-R", "/etc/snort/rules/snort.rules"]
       #
       #
-      # Offline analysis using directories of .pcaps bind-mounted from ./pcaps
-      ["snort",  "-c", "/etc/snort/snort.lua", "-l", "/var/log/snort", "-R", "/etc/snort/rules/local.rules", "--pcap-dir", "/tmp/"]
+      # Offline analysis using directories of .pcaps bind-mounted from ./pcaps, rules are loaded from /etc/snort/rules by default
+      ["snort",  "-c", "/etc/snort/snort.lua", "-l", "/var/log/snort", "-R", "/etc/snort/rules/snort.rules", "--pcap-dir", "/tmp/"]
