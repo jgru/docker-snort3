@@ -54,10 +54,11 @@ RUN wget https://github.com/snort3/snort3/archive/refs/tags/${SNORT_VERSION}.tar
 RUN ldconfig
 
 RUN mkdir -p /var/log/snort
+COPY etc/ ${INSTALLPATH}/etc/snort/
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     /opt/snort3-${SNORT_VERSION}.tar.gz /opt/libdaq-${DAQ_VERSION}.tar.gz
-
+WORKDIR /tmp
 # Test the validity of the installation
 CMD ["snort", "-c", "/etc/snort/snort.lua", "-R", "/etc/snort/rules/snort.rules", "-l", "/var/log/snort", "-T"]
