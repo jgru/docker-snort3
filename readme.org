@@ -4,7 +4,7 @@ This is a dockerized setup of =snort3=. It is geared toward checking a
 directory of .pcap-files but can be used for "online-mode" as well.
 
 * Motivation
-There is a [[https://hub.docker.com/r/ciscotalos/snort3][docker container with snort3]] provided by "Cisco Talos"
+There is a [[https://hub.docker.com/r/ciscotalos/snort3][docker container with snort3]] provided by "Cisco Talos",
 which is intended for interactive use. However, the source Dockerfile
 is not available; therefore, I decided to craft my own version, which
 is geared and configured toward my personal use cases.
@@ -16,12 +16,17 @@ favorite shell (=.bashrc= or =.zshrc=) to run the dockerized =snort3=.
 
 #+begin_src shell
 function snort () {
-    docker run -it --rm --net=host --user=$(id -u):$(id -g) -v $(pwd):/tmp \
-                 snort3 snort -c /etc/snort/snort.lua -k none -l /tmp/ $@
+    docker run -it --rm --net=host -v $(pwd):/tmp \
+                 snort3 snort -c /etc/snort/snort.lua -k none -l /tmp/ $@;
+    sudo chmod 644 alert*.txt
 }
 #+end_src
+Here, we bind-mount the current working directory into the container
+and define some rudimentary configuration for snort. The
+=chmod=-command in the function definition ensures that the resulting
+logs files are readable for an unpriviledged user.
 
-Note that this necessitates that the rules (an eventually the
+Note that this approach necessitates that the rules (an eventually the
 .pcap-files to analyze) are present in the current working
 directory's.
 
@@ -30,20 +35,23 @@ To run it, just call it like so
 snort -R /tmp/snort.rules -r /tmp/test.pcap
 #+end_src
 
-If you want to capture packets, add the function to =/etc/bash.rc= and
-run it as root or remove the =--user=-parameter from the
-function-definition above.
+If you want to run it in online-mode just use the following command:
 #+begin_src shell
-sudo su -
-snort -R /tmp/snort.rules -i wlp0s20f3
+# Retrieve NIC to capture on
+NIC=$(ip -j a show \
+    | jq '.[] | .addr_info | .[] | select(.scope == "global") | .label ' \
+	| grep "wlp" |  sed 's/"//g')
+
+# Run snort
+snort -R /tmp/snort.rules -i $NIC
 #+end_src
+
 
 ** Elaborated Usage Via =docker-compose=
 
-If you want to check .pcap-files, placed in the sub-directory
-=./pcaps=, using some Snort-rules placed in =./etc/rules/snort.rules=,
-just run:
-
+If you prefer a more static setup and just want to check .pcap-files,
+placed in the sub-directory =./pcaps= using some Snort-rules placed in
+=./etc/rules/snort.rules=, then run:
 #+begin_src shell
 docker-compose up
 #+end_src
