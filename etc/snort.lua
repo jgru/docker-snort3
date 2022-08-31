@@ -187,7 +187,7 @@ ips =
     -- use include for rules files; be sure to set your path
     -- note that rules files can include other rules files
     -- (see also related path vars at the top of snort_defaults.lua)
-    variables = default_variables
+    variables = default_variables,
     include = "./rules/snort.rules"
 }
 
