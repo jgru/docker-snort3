@@ -3,9 +3,6 @@ FROM debian:bookworm-slim
 
 MAINTAINER jgru
 
-ARG NIC=wlp0s20f3
-
-
 RUN apt-get update && \
     apt-get install -y \
         git \
