@@ -1,5 +1,7 @@
 #!/bin/bash
-
+# Just a simple script to grab the newest community rules
+# Eventually, change this to use pulledpork in the future
+#
 RULES_TAR="snort3-community-rules.tar.gz"
 RULES_DIR=${RULES_TAR%.tar.gz}
 RULES_FILE="snort3-community.rules"
