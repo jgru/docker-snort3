@@ -6,7 +6,7 @@ directory of .pcap-files but can be used for "online-mode" as well.
 * Motivation
 There is a [[https://hub.docker.com/r/ciscotalos/snort3][docker container with snort3]] provided by "Cisco Talos"
 which is intended for interactive use. However, the source Dockerfile
-is not available, therefore, I decided to craft my own version, which
+is not available; therefore, I decided to craft my own version, which
 is geared and configured toward my personal use cases.
 
 * Usage
