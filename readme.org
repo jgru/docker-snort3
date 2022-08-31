@@ -3,27 +3,70 @@
 This is a dockerized setup of =snort3=. It is geared toward checking a
 directory of .pcap-files but can be used for "online-mode" as well.
 
+* Motivation
+There is a [[https://hub.docker.com/r/ciscotalos/snort3][docker container with snort3]] provided by "Cisco Talos"
+which is intended for interactive use. However, the source Dockerfile
+is not available, therefore, I decided to craft my own version, which
+is geared and configured toward my personal use cases.
+
 * Usage
-To check .pcap-files in =./pcaps= using the Snort-rules in
-=./etc/rules/snort.rules=, just run:
+** Simple Usage via Shell Function
+It is rather convenient to declare a shell function inside your
+favorite shell (=.bashrc= or =.zshrc=) to run the dockerized =snort3=.
+
+#+begin_src shell
+function snort () {
+    docker run -it --rm --net=host --user=$(id -u):$(id -g) -v $(pwd):/tmp \
+                 snort3 snort -c /etc/snort/snort.lua -k none -l /tmp/ $@
+}
+#+end_src
+
+Note that this necessitates that the rules (an eventually the
+.pcap-files to analyze) are present in the current working
+directory's.
+
+To run it, just call it like so
+#+begin_src shell
+snort -R /tmp/snort.rules -r /tmp/test.pcap
+#+end_src
+
+If you want to capture packets, add the function to =/etc/bash.rc= and
+run it as root or remove the =--user=-parameter from the
+function-definition above.
+#+begin_src shell
+sudo su -
+snort -R /tmp/snort.rules -i wlp0s20f3
+#+end_src
+
+** Elaborated Usage Via =docker-compose=
+
+If you want to check .pcap-files, placed in the sub-directory
+=./pcaps=, using some Snort-rules placed in =./etc/rules/snort.rules=,
+just run:
+
 #+begin_src shell
 docker-compose up
 #+end_src
+
 This will append the arguments in the =command=-field of the
 =docker-compose.yml= to the =entrypoint= specified in there.
 
 Alternatively, you could use, the =docker-compose run=-command naming
-the service to pass custom options to the entrypoint to achieve the same:
+the service to pass custom options to the entrypoint to achieve the
+same:
+
 #+begin_src shell
-docker-compose run snort3 -r /tmp/test.pcap
+docker-compose run snort3 -r test.pcap
 #+end_src
+Note that the .pcap-files are expected to live in the a/m
+sub-directory.
 
 To run =snort3= in continuos online mode, run the following command.
+
 #+begin_src shell
 NIC="eth0" # or another NIC available on the host machine
 docker-compose run snort3 -i ${NIC}
 #+end_src
 
 * Acknowledgements
-The Dockerfile is inspired by
-https://github.com/John-Lin/docker-snort.
+The Dockerfile is inspired by https://github.com/John-Lin/docker-snort.
