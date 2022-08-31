@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   snort3:
-    image: snort3
+    image: jgu/snort3
     build:
       context: .
     network_mode: "host"
