@@ -15,7 +15,7 @@ services:
     # Specify the command:
     entrypoint:
       # Entrypoint
-      ["snort",  "-c", "/etc/snort/snort.lua", "-l", "/var/log/snort", "-R", "/etc/snort/rules/snort.rules"]
+      ["snort",  "-c", "/etc/snort/snort.lua", "-k", "none", "-l", "/var/log/snort", "-R", "/etc/snort/rules/snort.rules"]
 
     # Options appended to the entrypoint when calling docker-compose up
     command:
