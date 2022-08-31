@@ -1,0 +1,2 @@
+# Just a placeholder
+alert icmp  any -> 8.8.8.8 any (msg : Ping detected ; sid :1000004;)
