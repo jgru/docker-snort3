@@ -10,6 +10,21 @@ is not available; therefore, I decided to craft my own version, which
 is geared and configured toward my personal use cases.
 
 * Usage
+
+** Get the Container
+To retrieve the image from the Dockerhub, simply run:
+#+begin_src shell
+docker pull jgru/snort3:latest
+#+end_src
+
+To build the image yourself, run:
+#+begin_src shell
+git clone https://github.com/jgru/docker-snort3.git
+cd docker-snort3
+docker build . -t snort3
+#+end_src
+
+
 ** Simple Usage via Shell Function
 It is rather convenient to declare a shell function inside your
 favorite shell (=.bashrc= or =.zshrc=) to run the dockerized =snort3=.
@@ -40,7 +55,7 @@ If you want to run it in online-mode just use the following command:
 # Retrieve NIC to capture on
 NIC=$(ip -j a show \
     | jq '.[] | .addr_info | .[] | select(.scope == "global") | .label ' \
-	| grep "wlp" |  sed 's/"//g')
+        | grep "wlp" |  sed 's/"//g')
 
 # Run snort
 snort -R /tmp/snort.rules -i $NIC
