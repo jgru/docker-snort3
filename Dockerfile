@@ -52,11 +52,15 @@ RUN ldconfig
 
 RUN mkdir -p /var/log/snort
 
+# Deploy a custom configuration
 COPY etc/ ${INSTALLPATH}/etc/snort/
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
-    /opt/snort3-${SNORT_VERSION}.tar.gz /opt/libdaq-${DAQ_VERSION}.tar.gz
+    /opt/v${SNORT_VERSION}.tar.gz /opt/v${DAQ_VERSION}.tar.gz
+
+# Specify the working directory
 WORKDIR /tmp
+
 # Test the validity of the installation
 CMD ["snort", "-c", "/etc/snort/snort.lua", "-R", "/etc/snort/rules/snort.rules", "-l", "/var/log/snort", "-T"]
